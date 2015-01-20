@@ -2,23 +2,21 @@ fs = require('fs')
 expect = require('chai').expect
 cheerio = require('cheerio')
 request = require('request')
-PageInspector = require('../lib/inspectors/PageInspector')
+Page = require('../lib/Page')
 
 describe 'PageInspector', ->
   describe '#inspect', ->
     
     before (cb) ->
       @pageUrl = './test/files/index.html'
-      @pageInspector = new PageInspector()
-      @pageInspector.inspect @pageUrl, (err, result) =>
+      @page = new Page()
+      @page.load @pageUrl, (err) =>
         return cb(err) if err
-
-        @result = result
         cb()
 
 
     it 'inspectResult.cssCodes', ->
-      cssCodes = @result.cssCodes
+      cssCodes = @page.cssCodes
       actualCss = "@import 'style/theme.css';"
       expect(cssCodes[0].css).to.deep.equal(actualCss)
       expect(cssCodes[0].index).to.equal(0)
@@ -27,7 +25,7 @@ describe 'PageInspector', ->
 
 
     it 'inspectResult.declarations', ->
-      decls = @result.declarations
+      decls = @page.declarations
 
       expect(decls[0].property).to.equal('margin')
       expect(decls[0].value).to.equal("0")

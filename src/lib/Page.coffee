@@ -4,11 +4,11 @@ Lazy = require('lazy.js')
 request = require('request')
 fs = require('fs')
 async = require('async')
-util = require('../util')
+util = require('./util')
 
-# ページを調べるクラス
+# ページを表すクラス
 #
-module.exports = class PageInspector
+module.exports = class Page
 
   # @private
   #
@@ -56,42 +56,40 @@ module.exports = class PageInspector
   # @example
   #
   #   pageUrl = './test/files/index.html'
-  #   pageInspector = new PageInspector()
-  #   pageInspector.inspect pageUrl, (err, inspectResult) ->
+  #   page = new Page()
+  #   page.load pageUrl, (err) ->
   #     return cb(err) if err
   #
-  #     inspectResult.html
-  #     inspectResult.cssCodes
-  #     inspectResult.declarations
+  #     page.html
+  #     page.cssCodes
+  #     page.declarations
   #
-  inspect: (url, cb) ->
-    result = {}
-
+  load: (url, cb) ->
     async.waterfall [
       (cb) =>
         util.fetch url, '', (err, html) =>
           return cb(err) if err
 
-          result.html = html
-          $ = cheerio.load(html)
-          cb(null, $)
+          @html = html
+          @$ = cheerio.load(html)
+          cb(null, @$)
 
       ($, cb) =>
         @_fetchAllCss url, $, (err, cssCodes) =>
           return cb(err) if err
 
-          result.cssCodes = cssCodes
+          @cssCodes = cssCodes
           cb(null)
 
       (cb) =>
         parse = (code, cb) =>
           util.parseCss code.css, baseUrl: url, href: code.href, cb
 
-        async.map result.cssCodes, parse, (err, delcs) =>
-          return cb(err) if (err)
+        async.map @cssCodes, parse, (err, delcs) =>
+          return cb(err) if err
 
-          result.declarations = Lazy(delcs).flatten().toArray()
+          @declarations = Lazy(delcs).flatten().toArray()
           cb(null)
 
     ], (err) ->
-      cb(err, result)
+      cb(err)

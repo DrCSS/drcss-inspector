@@ -1,2 +1,1 @@
-module.exports =
-  PageInspector: require('./PageInspector')
+module.exports = {}
