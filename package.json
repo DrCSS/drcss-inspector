@@ -1,6 +1,6 @@
 {
   "name": "drcss-inspector",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "ウェブページで使用されているスタイルシートを調査するライブラリ",
   "main": "lib/index.js",
   "scripts": {
