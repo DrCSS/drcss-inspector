@@ -4,11 +4,11 @@ cheerio = require('cheerio')
 request = require('request')
 Page = require('../lib/Page')
 
-describe 'PageInspector', ->
-  describe '#inspect', ->
+describe 'Page', ->
+  describe '#load', ->
     
     before (cb) ->
-      @pageUrl = './test/files/index.html'
+      @pageUrl = './test/files/page1/index.html'
       @page = new Page()
       @page.load @pageUrl, (err) =>
         return cb(err) if err
@@ -46,3 +46,4 @@ describe 'PageInspector', ->
       expect(decls[4].property).to.equal('margin-top')
       expect(decls[4].value).to.equal("16px")
       expect(decls[4].href).to.equal('style/theme.css')
+

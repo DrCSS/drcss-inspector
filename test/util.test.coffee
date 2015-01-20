@@ -4,17 +4,16 @@ cheerio = require('cheerio')
 request = require('request')
 util = require('../lib/util')
 
-
 describe 'util', ->
   describe '.fetch', ->
     @timeout(5000)
 
-    it 'util.fetch("./test/files/index.html", "")', (next) ->
-      fs.readFile './test/files/index.html', (err, data) -> 
+    it 'util.fetch("./test/files/page1/index.html", "")', (next) ->
+      fs.readFile './test/files/page1/index.html', (err, data) -> 
         return next(err) if err
         actual = data.toString()
 
-        util.fetch './test/files/index.html', '', (err, html) ->
+        util.fetch './test/files/page1/index.html', '', (err, html) ->
           return next(err) if err
 
           expect(html).to.equal(actual)
