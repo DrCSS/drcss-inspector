@@ -1,0 +1,10 @@
+@import 'base.css';
+
+a {
+  color: #f00;
+  text-decoration: none;
+}
+
+p {
+  margin-top: 16px;
+}
